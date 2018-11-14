@@ -17,7 +17,7 @@ namespace FontCheck
     public partial class Form1 : Form
     {
         public delegate void setTextHandler(ProgressInfo info);
-        Regex reg = new Regex(@"txt|js|html|json|java|cs|css");
+        Regex reg = new Regex(@"txt|js|html|json|java|cs|css|php|py");
         int fileTotal = 0;
         int fileCount = 0;
         string logFileName = "1.txt";
@@ -110,8 +110,10 @@ namespace FontCheck
                     }
                 }
             }
-          
-            this.dirReg = new Regex(@strCollected);
+            if (strCollected != string.Empty) {
+                this.dirReg = new Regex(@strCollected);
+            }
+           
 
             progressBar1.Show();
             label1.Show();
@@ -178,9 +180,15 @@ namespace FontCheck
 
                 if (path == this.root)
                 {
-                    if (!dirReg.IsMatch(d.Name))
+                    if (this.dirReg == null)
                     {
                         GetDirectory(ef, d.FullName);
+                    }
+                    else {
+                        if (!this.dirReg.IsMatch(d.Name))
+                        {
+                            GetDirectory(ef, d.FullName);
+                        }
                     }
                 }
                 else {
@@ -197,9 +205,16 @@ namespace FontCheck
             {
                 if (path == this.root)
                 {
-                    if (!dirReg.IsMatch(d.Name))
+                    if (this.dirReg == null)
                     {
                         getFileTotal(d.FullName);
+                    }
+                    else
+                    {
+                        if (!this.dirReg.IsMatch(d.Name))
+                        {
+                            getFileTotal(d.FullName);
+                        }
                     }
                 }
                 else
